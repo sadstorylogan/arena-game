@@ -5,8 +5,12 @@ namespace Arena_Game.Arena_Scripts
 {
     public class RoomManager : MonoBehaviourPunCallbacks
     {
-        // Start is called before the first frame update
-        void Start()
+
+        [SerializeField] private GameObject player;
+
+        [SerializeField] private Transform spawnPoint;
+        
+        private void Start()
         {
             Debug.Log("Connecting...");
 
@@ -28,6 +32,15 @@ namespace Arena_Game.Arena_Scripts
             PhotonNetwork.JoinOrCreateRoom("test", null, null);
             
             Debug.Log("We're connected and in a room now");
+        }
+
+        public override void OnJoinedRoom()
+        {
+            base.OnJoinedRoom();
+            
+            Debug.Log("We're connected and in a room");
+
+            var _player = PhotonNetwork.Instantiate(this.player.name, spawnPoint.position, Quaternion.identity);
         }
         
     
