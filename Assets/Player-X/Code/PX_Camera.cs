@@ -92,13 +92,13 @@ namespace PlayerX
 			//... Input X & Y Rotation/Sensitivity
 			currentX = currentX + (dependencies.inputs.mouse_Inputs.x * Time.deltaTime) * rotateSensitivity;
 			
-			if(!dependencies.controller.reachingRight && !dependencies.controller.reachingLeft)
-			{
-				currentY = currentY + (dependencies.inputs.mouse_Inputs.y * Time.deltaTime) * rotateSensitivity;
-			}
-			
-			//... Limits
-			currentY = Mathf.Clamp(currentY, minAngle, maxAngle);
+			// if(!dependencies.controller.reachingRight && !dependencies.controller.reachingLeft)
+			// {
+			// 	currentY = currentY + (dependencies.inputs.mouse_Inputs.y * Time.deltaTime) * rotateSensitivity;
+			// }
+			//
+			// //... Limits
+			// currentY = Mathf.Clamp(currentY, minAngle, maxAngle);
 	    }
 		
 		
