@@ -9,6 +9,7 @@
 
 using UnityEngine;
 using PlayerX;
+using UnityEngine.UI;
 
 namespace PlayerX
 {
@@ -21,7 +22,9 @@ namespace PlayerX
 		
 		[Header("- Health")]
 	    public float playerHealth = 100f;
-		
+
+		[Header("- UI")] 
+		public Image healthBar;
 		
 		
 		void LateUpdate()
@@ -29,8 +32,36 @@ namespace PlayerX
 			//... Kill player if health depleted
 			if(playerHealth <= 0f)
 			{
+				if (dependencies.state.isAlive)
+				{
+					Debug.Log("Player died");
+				}
+				
 				dependencies.state.isAlive = false;
 				dependencies.state.RagdollMode();
+			}
+			
+			UpdateHealthBar(); 
+		}
+		
+		public void TakeDamage(float damage)
+		{
+			playerHealth -= damage;
+			Debug.Log("Player took damage: " + damage);
+			Debug.Log("Player health: " + playerHealth);
+			
+			if (playerHealth < 0)
+			{
+				playerHealth = 0;
+			}
+			UpdateHealthBar();
+		}
+
+		private void UpdateHealthBar()
+		{
+			if (healthBar != null)
+			{
+				healthBar.fillAmount = playerHealth / 100f;
 			}
 		}
 	}

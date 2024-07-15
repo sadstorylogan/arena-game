@@ -558,37 +558,46 @@ namespace PlayerX
 									if(hitObjectLeft.gameObject.transform.root != this.gameObject.transform.root && hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>() != null 
 									&& (hitObjectLeft.layer == LayerMask.NameToLayer("Player-X") || hitObjectLeft.layer == LayerMask.NameToLayer("Player-X (Other)")))
 									{
-										//... Head shot
-										if(hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.headPhysics.gameObject)
+										PX_Health playerHealth = hitObjectLeft.transform.root.gameObject.GetComponent<PX_Health>();
+
+										if (playerHealth != null)
 										{
-											hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().health.playerHealth -= weaponLeftJoint.GetComponent<PX_WeaponAttributes>().headShotDamage;
-											
-											if(hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>() && hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().state.isAlive)
+											//... Head shot
+											if(hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.headPhysics.gameObject)
 											{
-												var confetti = Instantiate(weaponLeftJoint.GetComponent<PX_WeaponAttributes>().headShotParticle, hit.point, Quaternion.identity);
-												confetti.transform.parent = dependencies.state.particleContainer;
+												playerHealth.TakeDamage(weaponLeftJoint.GetComponent<PX_WeaponAttributes>().headShotDamage);
+												
+												// hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().health.playerHealth -= weaponLeftJoint.GetComponent<PX_WeaponAttributes>().headShotDamage;
+											
+												if(hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>() && hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().state.isAlive)
+												{
+													var confetti = Instantiate(weaponLeftJoint.GetComponent<PX_WeaponAttributes>().headShotParticle, hit.point, Quaternion.identity);
+													confetti.transform.parent = dependencies.state.particleContainer;
+												}
 											}
-										}
 										
-										//... Body shot
-										else if(hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.rootPhysics.gameObject 
-										|| hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.bodyLowerPhysics.gameObject 
-										|| hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.bodyUpperPhysics.gameObject)
-										{
-											hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().health.playerHealth -= weaponLeftJoint.GetComponent<PX_WeaponAttributes>().bodyShotDamage;
-										}
+											//... Body shot
+											else if(hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.rootPhysics.gameObject 
+											        || hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.bodyLowerPhysics.gameObject 
+											        || hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.bodyUpperPhysics.gameObject)
+											{
+												playerHealth.TakeDamage(weaponLeftJoint.GetComponent<PX_WeaponAttributes>().bodyShotDamage);
+												// hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().health.playerHealth -= weaponLeftJoint.GetComponent<PX_WeaponAttributes>().bodyShotDamage;
+											}
 										
-										//... Limb shot
-										else if(hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.armLeftPhysics.gameObject 
-										|| hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.armRightPhysics.gameObject 
-										|| hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.handLeftPhysics.gameObject
-										|| hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.handRightPhysics.gameObject
-										|| hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.legLeftPhysics.gameObject
-										|| hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.legRightPhysics.gameObject
-										|| hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.footLeftPhysics.gameObject
-										|| hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.footRightPhysics.gameObject)
-										{
-											hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().health.playerHealth -= weaponLeftJoint.GetComponent<PX_WeaponAttributes>().limbShotDamage;
+											//... Limb shot
+											else if(hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.armLeftPhysics.gameObject 
+											        || hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.armRightPhysics.gameObject 
+											        || hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.handLeftPhysics.gameObject
+											        || hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.handRightPhysics.gameObject
+											        || hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.legLeftPhysics.gameObject
+											        || hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.legRightPhysics.gameObject
+											        || hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.footLeftPhysics.gameObject
+											        || hitObjectLeft == hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().player.footRightPhysics.gameObject)
+											{
+												playerHealth.TakeDamage(weaponLeftJoint.GetComponent<PX_WeaponAttributes>().limbShotDamage);
+												// hitObjectLeft.transform.root.gameObject.GetComponent<PX_Dependencies>().health.playerHealth -= weaponLeftJoint.GetComponent<PX_WeaponAttributes>().limbShotDamage;
+											}
 										}
 										
 										//... Sever player part if explosive
