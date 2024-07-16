@@ -72,6 +72,13 @@ namespace PlayerX
 			//... Damage
 			else if(!dismembered && impactMagnitude >= dependencies.state.reactRequiredForce && col.gameObject.transform.root.gameObject != this.gameObject.transform.root.gameObject)
 			{
+
+				PX_Health targetHealth = col.collider.transform.root.GetComponent<PX_Health>();
+				if (targetHealth != null)
+				{
+					float damage = impactMagnitude / 10f;
+					targetHealth.TakeDamage(damage);
+				}
 				//... React upon impact
 				dependencies.state.impactedPart = thisPhysics;
 				dependencies.state.impactDir = (this.gameObject.transform.position - col.transform.position).normalized;

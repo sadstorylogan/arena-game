@@ -1014,6 +1014,8 @@ namespace PlayerX
 						dependencies.weapons.equipLeft.weaponPhysics.AddForceAtPosition(dependencies.player.rootPhysics.transform.forward * punchLeftRamp, dependencies.weapons.equipLeft.attackPoint.position, ForceMode.Impulse);
 					}
 					
+					DetectAndApplyDamage(dependencies.weapons.equipLeft.attackPoint.position, punchLeftRamp);
+					
 					punching = false;
 					punchLeftRamp = 0f;
 					
@@ -1083,6 +1085,8 @@ namespace PlayerX
 						dependencies.weapons.equipRight.weaponPhysics.AddForceAtPosition(dependencies.player.rootPhysics.transform.forward * punchRightRamp, dependencies.weapons.equipRight.attackPoint.position, ForceMode.Impulse);
 					}
 					
+					DetectAndApplyDamage(dependencies.weapons.equipRight.attackPoint.position, punchRightRamp);
+					
 					punching = false;
 					punchRightRamp = 0f;
 					
@@ -1099,8 +1103,20 @@ namespace PlayerX
 				}
 			}
 	    }
-		
-		
+
+	    private void DetectAndApplyDamage(Vector3 attackPoint, float punchForce)
+	    {
+		    RaycastHit hit;
+		    if (Physics.Raycast(attackPoint, transform.forward,out hit, 1.0f))
+		    {
+			    PX_Health targetHealth = hit.collider.transform.root.GetComponent<PX_Health>();
+			    if (targetHealth != null)
+			    {
+				    float damage = punchForce / 1000f; 
+				    targetHealth.TakeDamage(damage);
+			    }
+		    }
+	    }
 		
 		//... Reset Punch ...
 		void ResetPunchLeft()
