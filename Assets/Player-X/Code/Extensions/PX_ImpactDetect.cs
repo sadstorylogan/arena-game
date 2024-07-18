@@ -32,8 +32,6 @@ namespace PlayerX
 			thisPhysics = this.gameObject.GetComponent<Rigidbody>();
 		}
 		
-		
-		
 		void OnCollisionEnter(Collision col)
 		{
 			var impactMagnitude = col.relativeVelocity.magnitude;
