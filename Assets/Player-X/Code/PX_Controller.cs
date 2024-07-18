@@ -959,6 +959,8 @@ namespace PlayerX
 		//... Punch ...
 	    void Punch()
 	    {
+
+		    string targetTag = (gameObject.CompareTag("Player 1")) ? "Player 2" : "Player 1";
 			if(enablePunch)
 			{
 				//... Punch left
@@ -1014,7 +1016,7 @@ namespace PlayerX
 						dependencies.weapons.equipLeft.weaponPhysics.AddForceAtPosition(dependencies.player.rootPhysics.transform.forward * punchLeftRamp, dependencies.weapons.equipLeft.attackPoint.position, ForceMode.Impulse);
 					}
 					
-					DetectAndApplyDamage(dependencies.weapons.equipLeft.attackPoint.position, punchLeftRamp);
+					DetectAndApplyDamage(dependencies.weapons.equipLeft.attackPoint.position, punchLeftRamp, targetTag);
 					
 					punching = false;
 					punchLeftRamp = 0f;
@@ -1085,7 +1087,7 @@ namespace PlayerX
 						dependencies.weapons.equipRight.weaponPhysics.AddForceAtPosition(dependencies.player.rootPhysics.transform.forward * punchRightRamp, dependencies.weapons.equipRight.attackPoint.position, ForceMode.Impulse);
 					}
 					
-					DetectAndApplyDamage(dependencies.weapons.equipRight.attackPoint.position, punchRightRamp);
+					DetectAndApplyDamage(dependencies.weapons.equipRight.attackPoint.position, punchRightRamp, targetTag);
 					
 					punching = false;
 					punchRightRamp = 0f;
@@ -1104,13 +1106,13 @@ namespace PlayerX
 			}
 	    }
 
-	    private void DetectAndApplyDamage(Vector3 attackPoint, float punchForce)
+	    private void DetectAndApplyDamage(Vector3 attackPoint, float punchForce, string targetTag)
 	    {
 		    RaycastHit hit;
 		    if (Physics.Raycast(attackPoint, transform.forward,out hit, 1.0f))
 		    {
 			    PX_Health targetHealth = hit.collider.transform.root.GetComponent<PX_Health>();
-			    if (targetHealth != null)
+			    if (targetHealth != null && targetHealth.gameObject.CompareTag(targetTag))
 			    {
 				    float damage = punchForce / 1000f; 
 				    targetHealth.TakeDamage(damage);

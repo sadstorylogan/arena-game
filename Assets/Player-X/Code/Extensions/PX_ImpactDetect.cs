@@ -72,9 +72,10 @@ namespace PlayerX
 			//... Damage
 			else if(!dismembered && impactMagnitude >= dependencies.state.reactRequiredForce && col.gameObject.transform.root.gameObject != this.gameObject.transform.root.gameObject)
 			{
+				string targetTag = (gameObject.CompareTag("Player 1")) ? "Player 2" : "Player 1";
 
 				PX_Health targetHealth = col.collider.transform.root.GetComponent<PX_Health>();
-				if (targetHealth != null)
+				if (targetHealth != null && targetHealth.gameObject.CompareTag(targetTag))
 				{
 					float damage = impactMagnitude / 10f;
 					targetHealth.TakeDamage(damage);
