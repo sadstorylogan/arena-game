@@ -1013,8 +1013,12 @@ namespace PlayerX
 						//... Left hand punch force forward direction
 						dependencies.weapons.equipLeft.weaponPhysics.AddForceAtPosition(dependencies.player.rootPhysics.transform.forward * punchLeftRamp, dependencies.weapons.equipLeft.attackPoint.position, ForceMode.Impulse);
 					}
-					
-					DetectAndApplyDamage(dependencies.weapons.equipLeft.attackPoint.position, punchLeftRamp);
+
+					var punchCollision = dependencies.player.handLeftJoint.GetComponent<PX_PunchCollision>();
+					if (punchCollision != null)
+					{
+						punchCollision.EnableDamage(punchLeftRamp / 1000f);
+					}
 					
 					punching = false;
 					punchLeftRamp = 0f;
@@ -1084,8 +1088,12 @@ namespace PlayerX
 						//... Right hand punch force forward direction
 						dependencies.weapons.equipRight.weaponPhysics.AddForceAtPosition(dependencies.player.rootPhysics.transform.forward * punchRightRamp, dependencies.weapons.equipRight.attackPoint.position, ForceMode.Impulse);
 					}
-					
-					DetectAndApplyDamage(dependencies.weapons.equipRight.attackPoint.position, punchRightRamp);
+
+					var punchCollision = dependencies.player.handRightJoint.GetComponent<PX_PunchCollision>();
+					if (punchCollision != null)
+					{
+						punchCollision.EnableDamage(punchRightRamp / 100f);
+					}
 					
 					punching = false;
 					punchRightRamp = 0f;
@@ -1103,20 +1111,7 @@ namespace PlayerX
 				}
 			}
 	    }
-
-	    private void DetectAndApplyDamage(Vector3 attackPoint, float punchForce)
-	    {
-		    RaycastHit hit;
-		    if (Physics.Raycast(attackPoint, transform.forward,out hit, 1.0f))
-		    {
-			    PX_Health targetHealth = hit.collider.transform.root.GetComponent<PX_Health>();
-			    if (targetHealth != null)
-			    {
-				    float damage = punchForce / 1000f; 
-				    targetHealth.TakeDamage(damage);
-			    }
-		    }
-	    }
+	    
 		
 		//... Reset Punch ...
 		void ResetPunchLeft()
@@ -1125,6 +1120,12 @@ namespace PlayerX
 			{
 				dependencies.player.armLeftJoint.slerpDrive = dependencies.player.armLeftJointDrive;
 				dependencies.player.handLeftJoint.slerpDrive = dependencies.player.handLeftJointDrive;
+			}
+			
+			var punchCollision = dependencies.player.handLeftJoint.GetComponent<PX_PunchCollision>();
+			if (punchCollision != null)
+			{
+				punchCollision.DisableDamage();
 			}
 		}
 		
@@ -1135,6 +1136,12 @@ namespace PlayerX
 			{
 				dependencies.player.armRightJoint.slerpDrive = dependencies.player.armRightJointDrive;
 				dependencies.player.handRightJoint.slerpDrive = dependencies.player.handRightJointDrive;
+			}
+			
+			var punchCollision = dependencies.player.handRightJoint.GetComponent<PX_PunchCollision>();
+			if (punchCollision != null)
+			{
+				punchCollision.DisableDamage();
 			}
 		}
 		
